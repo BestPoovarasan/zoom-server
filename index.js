@@ -1,6 +1,6 @@
-const express = require('express')
+const express = require('express');
 const app = express();
-var cors = require('cors')
+var cors = require('cors');
 const mongodb = require("mongodb");
 const mongoClient=mongodb.mongoClient;
 const dotenv = require("dotenv").config();
@@ -21,8 +21,8 @@ app.get('/', (req, res) => {
   });
 
 
-// <---------------signup steps----------------->
-  app.post("/register", async function (req, res) {
+// <---------------Register steps----------------->
+ app.post("/signup", async function (req, res) {
     try {
       // Open the Connection
       const connection = await mongoClient.connect(URL);
@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
   });
 
 // <---------------login steps----------------->
-  app.post("/login", async function (req, res) {
+  app.post("/signin", async function (req, res) {
     try {
       // Open the Connection
       const connection = await mongoClient.connect(URL);
