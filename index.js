@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 var cors = require('cors');
 const mongodb = require("mongodb");
-const mongoClient=mongodb.mongoClient;
+const mongoClient=mongodb.MongoClient;
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
 
