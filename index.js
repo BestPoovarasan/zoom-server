@@ -5,6 +5,8 @@ const mongodb = require("mongodb");
 const mongoClient=mongodb.MongoClient;
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
+const bcryptjs = require("bcrypt");
+const SECRET = "q5IUZ87DdZkK00AocKqs";
 
 //<------- middleware------------>
 app.use(express.json());
@@ -15,10 +17,26 @@ app.use(
 );
 
 
-// <---------sample------------>
+// <---------sample Home page------------>
 app.get('/', (req, res) => {
     res.send('Hello World!')
   });
+
+
+  let authenticate = function (req, res, next) {
+    if (req.headers.authorization) {
+      let verify = jwt.verify(req.headers.authorization, SECRET);
+      if (verify) {
+        req.user_id = verify._id;
+        next();
+      } else {
+        res.status(401).json({message: "unauthorized"});
+      }
+    } else {
+      res.status(401).json({message: "unauthorized"});
+    }
+  }
+   
 
 
 // <---------------Register steps----------------->
@@ -28,6 +46,10 @@ app.get('/', (req, res) => {
       const connection = await mongoClient.connect(URL);
       // Select the DB
       const db = connection.db("zoom");
+      //<-------bcrypt is used for password security---------->
+      const salt = await bcryptjs.genSalt(10);
+      const hash = await bcryptjs.hash(req.body.password, salt);
+      req.body.password = hash;
       // Select the Collection
       await db.collection("zoomusers").insertOne(req.body);
       // Close the connection
@@ -52,9 +74,19 @@ app.get('/', (req, res) => {
       // Select the Collection
       const user = await db.collection("zoomusers").findOne({ email: req.body.email });
       if (user) {
-        res.json({
-          message: "Successfully Logged In",
-        });
+        const match = await bcryptjs.compare(req.body.password, user.password);
+        if (match) {
+          // <----------Json Web Token------------------------------------->
+          const token = jwt.sign({_id : user._id, email: user.email,}, SECRET);
+          res.json({
+            message: "suceessfully Login",
+            token,
+          });
+        } else {
+          res.json({
+            message: "password is incorrect",
+          });
+        }
       } else {
         res.status(401).json({
           message: "User not found",
