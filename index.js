@@ -78,7 +78,7 @@ app.get('/', (req, res) => {
         const match = await bcryptjs.compare(req.body.password, user.password);
         if (match) {
           // <----------Json Web Token------------------------------------->
-          const token = jwt.sign({_id : user._id, email: user.email,}, SECRET);
+          const token = jwt.sign({_id : user._id,}, SECRET);
           res.json({
             message: "suceessfully Login",
             token,
