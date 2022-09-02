@@ -74,6 +74,7 @@ app.get('/', (req, res) => {
       const db = connection.db("zoom");
       // Select the Collection
       const user = await db.collection("zoomusers").findOne({ email: req.body.email });
+
       if (user) {
         const match = await bcryptjs.compare(req.body.password, user.password);
         if (match) {
