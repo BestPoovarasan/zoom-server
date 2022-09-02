@@ -6,7 +6,8 @@ const mongoClient=mongodb.MongoClient;
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
 const bcryptjs = require("bcrypt");
-const SECRET = "q5IUZ87DdZkK00AocKqs";
+const jwt = require("jsonwebtoken");
+const SECRET = process.env.SECRET;
 
 //<------- middleware------------>
 app.use(express.json());
