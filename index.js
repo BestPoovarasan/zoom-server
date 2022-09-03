@@ -80,7 +80,7 @@ app.post("/login", async function (req, res) {
           // Token
           const token = jwt.sign({ _id: user._id }, SECRET);
           res.json({
-            message: "Successfully Logged In",
+            message: "Successfully Login",
             token,
           });
         } else {
