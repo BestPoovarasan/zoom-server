@@ -5,7 +5,7 @@ const mongodb = require("mongodb");
 const mongoClient=mongodb.MongoClient;
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.SECRET;
 
@@ -48,8 +48,8 @@ app.get('/', (req, res) => {
       // Select the DB
       const db = connection.db("zoom");
       //<-------bcrypt is used for password security---------->
-      const salt = await bcryptjs.genSalt(10);
-      const hash = await bcryptjs.hash(req.body.password, salt);
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(req.body.password, salt);
       req.body.password = hash;
       // Select the Collection
       await db.collection("zoomusers").insertOne(req.body);
@@ -75,7 +75,7 @@ app.get('/', (req, res) => {
       // Select the Collection
       const user = await db.collection("zoomusers").findOne({ email: req.body.email });
       if (user) {
-        const match = await bcryptjs.compare(req.body.password, user.password);
+        const match = await bcrypt.compare(req.body.password, user.password);
         if (match) {
           // <----------Json Web Token------------------------------------->
           const token = jwt.sign({_id : user._id}, SECRET);
