@@ -76,16 +76,16 @@ app.post("/login", async function (req, res) {
       const user = await db.collection("zoomusers").findOne({ email: req.body.email });
       if (user) {
         const match = await bcryptjs.compare(req.body.password, user.password);
-        // <----------Json Web Token------------------------------------->
         if (match) {
-          // const token = jwt.sign({ id: user._id}, SECRET);
+          // Token
+          const token = jwt.sign({ _id: user._id }, SECRET);
           res.json({
-            message: "suceessfully Login",
-            // token,
+            message: "Successfully Logged In",
+            token,
           });
         } else {
-          res.json({
-            message: "password is incorrect",
+          res.status(401).json({
+            message: "Password is incorrect",
           });
         }
       } else {
