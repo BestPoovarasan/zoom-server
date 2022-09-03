@@ -7,7 +7,7 @@ const dotenv = require("dotenv").config();
 const URL = process.env.DB;
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const SECRET = process.env.SECRET;
+// const SECRET = process.env.SECRET;
 
 //<------- middleware------------>
 app.use(express.json());
@@ -78,7 +78,8 @@ app.post("/login", async function (req, res) {
         const match = await bcryptjs.compare(req.body.password, user.password);
         if (match) {
           // Token
-          const token = jwt.sign({ _id: user._id }, "q5IUZ87DdZkK00AocKqs");
+          const token = jwt.sign({ _id: user._id }, process.env.SECRET);
+          console.log(token);
           res.json({
             message: "Successfully Login",
             token,
