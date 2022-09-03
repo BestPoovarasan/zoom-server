@@ -24,19 +24,19 @@ app.get('/', (req, res) => {
   });
 
 
-  let authenticate = function (req, res, next) {
-    if (req.headers.authorization) {
-      let verify = jwt.verify(req.headers.authorization, SECRET);
-      if (verify) {
-        req.user_id = verify._id;
-        next();
-      } else {
-        res.status(401).json({message: "unauthorized"});
-      }
-    } else {
-      res.status(401).json({message: "unauthorized"});
-    }
-  }
+  // let authenticate = function (req, res, next) {
+  //   if (req.headers.authorization) {
+  //     let verify = jwt.verify(req.headers.authorization, SECRET);
+  //     if (verify) {
+  //       req.user_id = verify._id;
+  //       next();
+  //     } else {
+  //       res.status(401).json({message: "unauthorized"});
+  //     }
+  //   } else {
+  //     res.status(401).json({message: "unauthorized"});
+  //   }
+  // }
    
 
 
@@ -78,7 +78,7 @@ app.post("/signin", async function (req, res) {
         const match = await bcryptjs.compare(req.body.password, user.password);
         // <----------Json Web Token------------------------------------->
         if (match) {
-          const token = jwt.sign({ id : user._id, email: user.email, role: user.role}, SECRET);
+          const token = jwt.sign({ id : user._id}, SECRET);
           res.json({
             message: "suceessfully Login",
             token,
