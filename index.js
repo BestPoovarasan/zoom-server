@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
   });
 
 // <---------------login steps----------------->
-app.post("/signin", async function (req, res) {
+app.post("/login", async function (req, res) {
     try {
       // Open the Connection
       const connection = await mongoClient.connect(URL);
@@ -78,10 +78,10 @@ app.post("/signin", async function (req, res) {
         const match = await bcryptjs.compare(req.body.password, user.password);
         // <----------Json Web Token------------------------------------->
         if (match) {
-          const token = jwt.sign({ id : user._id}, SECRET);
+          // const token = jwt.sign({ id: user._id}, SECRET);
           res.json({
             message: "suceessfully Login",
-            token,
+            // token,
           });
         } else {
           res.json({
