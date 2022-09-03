@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
   });
 
 // <---------------login steps----------------->
-  app.post("/signin", async function (req, res) {
+app.post("/signin", async function (req, res) {
     try {
       // Open the Connection
       const connection = await mongoClient.connect(URL);
@@ -76,9 +76,9 @@ app.get('/', (req, res) => {
       const user = await db.collection("zoomusers").findOne({ email: req.body.email });
       if (user) {
         const match = await bcryptjs.compare(req.body.password, user.password);
+        // <----------Json Web Token------------------------------------->
         if (match) {
-          // <----------Json Web Token------------------------------------->
-          const token = jwt.sign({_id : user._id}, SECRET);
+          const token = jwt.sign({ id : user._id, email: user.email, role: user.role}, SECRET);
           res.json({
             message: "suceessfully Login",
             token,
