@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
       });
     } catch (error) {
       res.json({
-        message: "Error, Try Again",
+        message: "Error,",
       });
     }
   });
