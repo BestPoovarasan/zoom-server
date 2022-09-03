@@ -5,7 +5,7 @@ const mongodb = require("mongodb");
 const mongoClient=mongodb.MongoClient;
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
-const bcryptjs = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.SECRET;
 
@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
       });
     } catch (error) {
       res.json({
-        message: "Error",
+        message: "Error, Try Again",
       });
     }
   });
@@ -74,7 +74,6 @@ app.get('/', (req, res) => {
       const db = connection.db("zoom");
       // Select the Collection
       const user = await db.collection("zoomusers").findOne({ email: req.body.email });
-
       if (user) {
         const match = await bcryptjs.compare(req.body.password, user.password);
         if (match) {
