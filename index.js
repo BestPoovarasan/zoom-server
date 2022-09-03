@@ -5,7 +5,7 @@ const mongodb = require("mongodb");
 const mongoClient=mongodb.MongoClient;
 const dotenv = require("dotenv").config();
 const URL = process.env.DB;
-const bcryptjs = require(bcryptjs);
+const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.SECRET;
 
