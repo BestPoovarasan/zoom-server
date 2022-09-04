@@ -24,19 +24,19 @@ app.get('/', (req, res) => {
   });
 
 
-  // let authenticate = function (req, res, next) {
-  //   if (req.headers.authorization) {
-  //     let verify = jwt.verify(req.headers.authorization, SECRET);
-  //     if (verify) {
-  //       req.user_id = verify._id;
-  //       next();
-  //     } else {
-  //       res.status(401).json({message: "unauthorized"});
-  //     }
-  //   } else {
-  //     res.status(401).json({message: "unauthorized"});
-  //   }
-  // }
+  let authenticate = function (req, res, next) {
+    if (req.headers.authorization) {
+      let verify = jwt.verify(req.headers.authorization, "q5IUZ87DdZkK00AocKqs");
+      if (verify) {
+        req.user_id = verify._id;
+        next();
+      } else {
+        res.status(401).json({message: "unauthorized"});
+      }
+    } else {
+      res.status(401).json({message: "unauthorized"});
+    }
+  }
    
 
 
@@ -100,7 +100,24 @@ app.post("/login", async function (req, res) {
   });
 
 
-
+  app.get("/users", authenticate, async function (req, res) {
+    try {
+      // Open the Connection
+      const connection = await mongoClient.connect(URL);
+      // Select the DB
+      const db = connection.db("zoom");
+      // Select the collection and do the operation
+      let students = await db
+        .collection("zoomusers")
+        .find({ userid: mongodb.ObjectId(req.userid) })
+        .toArray();
+      // Close the connection
+      await connection.close();
+      res.json(students);
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
 
 
