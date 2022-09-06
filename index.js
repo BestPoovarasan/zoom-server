@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
   });
 
 // <---------------login steps----------------->
-app.post("/login", async function (req, res) {
+app.post("/login", authenticate, async function (req, res) {
     try {
       // Open the Connection
       const connection = await mongoClient.connect(URL);
