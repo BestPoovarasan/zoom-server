@@ -79,7 +79,6 @@ app.post("/login", async function (req, res) {
         if (match) {
           // Token
           const token = jwt.sign({ _id: user._id }, "q5IUZ87DdZkK00AocKqs");
-          console.log(token);
           res.json({
             message: "Successfully Login",
             token,
