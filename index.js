@@ -23,20 +23,23 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
   });
 
-
   let authenticate = function (req, res, next) {
     if (req.headers.authorization) {
+     try {
       let verify = jwt.verify(req.headers.authorization, "q5IUZ87DdZkK00AocKqs");
       if (verify) {
-        req.user._id = verify.id;
+        req.userid = verify._id;
         next();
       } else {
-        res.status(401).json({message: "unauthorized"});
+        res.status(401).json({ message: "Unauthorized" });
       }
+     } catch (error) {
+      res.status(401).json({ message: "Unauthorized" });
+     }
     } else {
-      res.status(401).json({message: "unauthorized"});
+      res.status(401).json({ message: "Unauthorized" });
     }
-  }
+  };
    
 
 
@@ -78,7 +81,7 @@ app.post("/login", async function (req, res) {
         const match = await bcryptjs.compare(req.body.password, user.password);
         if (match) {
           // Token
-          const token = jwt.sign({ id: user._id }, "q5IUZ87DdZkK00AocKqs");
+          const token = jwt.sign({ _id: user._id }, "q5IUZ87DdZkK00AocKqs");
           res.json({
             message: "Successfully Login",
             token,
@@ -99,20 +102,23 @@ app.post("/login", async function (req, res) {
   });
 
 
-  app.get("/users", authenticate, async function (req, res) {
+  app.get("/user/:id", authenticate, async function (req, res) {
     try {
       // Open the Connection
       const connection = await mongoClient.connect(URL);
+  
       // Select the DB
-      const db = connection.db("zoom");
+      const db = connection.db("zoomusers");
+  
       // Select the collection and do the operation
-      let students = await db
+      let profiles = await db
         .collection("zoomusers")
-        .find({ userid: mongodb.ObjectId(req.userid) })
-        .toArray();
+        .findOne({ _id: mongodb.ObjectId(req.params.id) });
+  
       // Close the connection
       await connection.close();
-      res.json(students);
+  
+      res.json(profiles);
     } catch (error) {
       console.log(error);
     }
