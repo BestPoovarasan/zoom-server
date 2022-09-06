@@ -63,13 +63,13 @@ app.get('/', (req, res) => {
       });
     } catch (error) {
       res.json({
-        message: "Error",
+        message: "Error try again",
       });
     }
   });
 
 // <---------------login steps----------------->
-app.post("/login", authenticate, async function (req, res) {
+app.post("/login", async function (req, res) {
     try {
       // Open the Connection
       const connection = await mongoClient.connect(URL);
