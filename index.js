@@ -87,12 +87,12 @@ app.post("/login", authenticate, async function (req, res) {
             token,
           });
         } else {
-          res.json({
+          res.status(401).json({
             message: "Password is incorrect",
           });
         }
       } else {
-        res.json({
+        res.status(401).json({
           message: "User not found",
         });
       }
