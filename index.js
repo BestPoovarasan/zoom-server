@@ -20,7 +20,7 @@ app.use(
 
 // <---------sample Home page------------>
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello World!!')
   });
 
   let authenticate = function (req, res, next) {
