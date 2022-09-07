@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
   let authenticate = function (req, res, next) {
     if (req.headers.authorization) {
      try {
-      let verify = jwt.verify(req.headers.authorization, "q5IUZ87DdZkK00AocKqs");
+      let verify = jwt.verify(req.headers.authorization, process.env.SECRET_KEY);
       if (verify) {
         req.userid = verify._id;
         next();
@@ -81,7 +81,7 @@ app.post("/login", async function (req, res) {
         const match = await bcryptjs.compare(req.body.password, user.password);
         if (match) {
           // Token
-          const token = jwt.sign({ _id: user._id }, "q5IUZ87DdZkK00AocKqs");
+          const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
           res.json({
             message: "Successfully Login",
             token,
